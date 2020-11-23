@@ -1,0 +1,30 @@
+#container {
+    display: flex;
+    min-width: 400px;
+    max-width: 500px;
+    min-height: 500px;
+    max-height: 600px;
+    margin: 0 auto;
+    flex-direction: column;
+/* justify-content: top; */
+    align-items: center;
+}
+
+#board {
+    display:grid;
+    grid-template-rows: 100px 100px 100px;
+    grid-template-columns: 100px 100px 100px;
+    grid-template-rows: repeat(var(--grid-rows), 100px);
+    grid-template-columns: repeat(var(--grid-cols), 100px);
+    text-align: center;
+    border: 1px solid black;
+}
+.grid-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    justify-self: stretch;
+    border: 1px solid black;
+    
+}
