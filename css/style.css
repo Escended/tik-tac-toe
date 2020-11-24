@@ -12,6 +12,7 @@
 
 #board {
     display:grid;
+    
     grid-template-rows: 100px 100px 100px;
     grid-template-columns: 100px 100px 100px;
     grid-template-rows: repeat(var(--grid-rows), 100px);
@@ -20,11 +21,22 @@
     border: 1px solid black;
 }
 .grid-item {
+    font-family: 'Fredoka One', cursive;
     display: flex;
+    cursor: pointer;
     justify-content: center;
     align-items: center;
     font-size: 60px;
     justify-self: stretch;
     border: 1px solid black;
     
+}
+
+#player-info {
+    display: flex;
+    margin: 20px;
+    gap: 110px;
+}
+#score-board {
+    margin: 20px;
 }
