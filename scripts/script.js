@@ -1,4 +1,13 @@
-
+// player factory function
+const player = (name, sign) => {
+    let winner = false;
+    const info = () => {
+        return document.querySelector("[data-player='1']")
+        //name.innerText = "bob";
+        //console.log(name);
+    };
+    return { name, sign, info, winner };
+};
 // initialise the gameBoard and display it 
 const gameBoard = (() => {
     // Initialise a board with null values for easy indexing
@@ -24,11 +33,12 @@ const gameBoard = (() => {
     };
 })();
 
-//console.log(gameBoard.board);
 
 // check state of the game winner / draw / valid move 
 const gameState = (() => {
-    const board = gameBoard.board;
+    let board = gameBoard.board;
+    const X = player("Player 1", "X");
+    const O = player("Player 2", "O");
     let winner = false;
     const checkWinner = () => {
         if (!winner) {
@@ -39,22 +49,30 @@ const gameState = (() => {
             } else if (checkDiagonal()) {
                 winner = true;
             }
-            // winner = checkHorizontal();
-            // winner = checkVertical();
-            // winner = checkDiagonal();
-            //console.log(winner);
+            play.end();
             return winner;
         }
-        //console.log(winner);
+
+        // if (!winner) {
+        //     console.log(winner);
+        //     if (checkHorizontal() || checkVertical() || checkDiagonal()) {
+        //         winner = true;
+        //         return winner;
+        //     }
+        // }
+
 
     }
     const checkHorizontal = () => {
-        //console.log(gameBoard.board)
+
         for (let i = 0; i < 9; i += 3) {
 
             if (board[i] !== null) {
                 if (board[i] === board[i + 1] && board[i] === board[i + 2]) {
                     console.log(`winner: ${board[i]}`);
+                    gameState.winner = true;
+                    updatePlayerStatus(board[i]);
+                    play.end();
                     return true;
                 }
             }
@@ -66,6 +84,9 @@ const gameState = (() => {
             if (board[i] !== null) {
                 if (board[i] === board[i - 3] && board[i] === board[i + 3]) {
                     console.log(`winner vert: ${board[i]}`);
+                    gameState.winner = true;
+                    updatePlayerStatus(board[i]);
+                    play.end();
                     return true;
                 }
             }
@@ -77,23 +98,32 @@ const gameState = (() => {
             if ((board[4] === board[0] && board[4] === board[8]) ||
                 (board[4] === board[2] && board[4] === board[6])) {
                 console.log(`winner diag: ${board[4]}`);
+                gameState.winner = true;
+                updatePlayerStatus(board[4]);
+                play.end();
                 return true;
             }
         }
-    }
+    };
+
+    const updatePlayerStatus = (board) => {
+        if (board === 'X') {
+            X.winner = true;
+            console.log('X won:', X.winner);
+        } else {
+            O.winner = true;
+            console.log('O won:', O.winner);
+        }
+    };
 
     return {
         check: checkWinner,
+        winner: winner,
+        player1: X,
+        player2: O,
     }
 })();
 
-// player factory function
-const player = (name, sign) => {
-    const info = () => {
-        const name = document.querySelectorAll
-    };
-    return { name, sign };
-};
 
 
 
@@ -102,8 +132,7 @@ const player = (name, sign) => {
 
 const play = (() => {
     // Create two players
-    const X = player("eli", "X");
-    const O = player("ela", "O");
+
     const cells = document.querySelectorAll('div.grid-item');
     const startGame = () => {
         // start game logic
@@ -114,21 +143,12 @@ const play = (() => {
         // restart the game logic
         const btn = document.querySelector('button');
         btn.addEventListener('click', (e) => {
-            //location.reload();
-            //console.log(e); 
-            gameBoard.board = [null, null, null, null, null, null, null, null, null];
-            console.log(gameBoard.board);
-            cells.forEach( (cell) => {
-                cell.innerText = "";
-            });
-            gameState.winner = false;
-            startGame();
-            console.log(gameState.winner);
+            location.reload();
         });
     };
 
     const addMark = () => {
-        console.log("working");
+        //console.log("working");
         let currentMark = null;
         cells.forEach((cell) => {
             cell.addEventListener('click', (e) => {
@@ -158,16 +178,29 @@ const play = (() => {
         });
     };
 
-    const freezeGame = () => {
-        cells.forEach((cell) => {
-            cell.setAttribute("disabled", "disabled");
-        })
+    const endGame = () => {
+        console.log(gameState.winner);
+        const player = document.querySelector('.winner-msg');
+        player.style.display = 'block';
+        if (gameState.winner === true) {
+            if (gameState.player1.winner) {
+                player.innerText = 'Player 1 is the Winner!'
+            } else if (gameState.player2.winner) {
+                player.innerText = 'Player 2 is the Winner!';
+            } else {
+                player.innerText = 'Draw';
+            }
+            console.log(player);
+        } else if (gameState.winner === false && !gameBoard.board.includes(null)) {
+            player.innerText = 'Draw';
+        }
     };
 
     return {
         start: startGame(),
         restart: restartGame(),
         mark: addMark,
+        end: endGame,
     };
 })();
 
