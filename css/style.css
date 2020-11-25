@@ -38,7 +38,7 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    margin: 50px;
+    margin: 30px;
     /* gap: 110px; */
     font-family: 'Inconsolata';
 }
